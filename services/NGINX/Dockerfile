@@ -1,15 +1,15 @@
 FROM alpine:3.19
 WORKDIR /www
-COPY	ssl-cert.conf /www/ssl-cert.conf
 
 RUN \
 	required="ca-certificates openssl openssl-dev openrc" && \
 	apk add $required && \
 	apk add nginx && \
-	mkdir /etc/ssl/.private && \
-	mkdir /etc/ssl/certificates && \
-	openssl genrsa -out /etc/ssl/.private/server.key 2048 && \
-	openssl req -new -key /etc/ssl/.private/server.key -out /etc/ssl/certificates/cert.csr  -config ssl-cert.conf
+	mkdir -p /root/.ssh
 
-EXPOSE	443
-#CMD		[ "./hello.sh" ]
+COPY ./.private /root/.ssh
+COPY index.html index.html
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx-server.conf /etc/nginx/http.d/nginx-server.conf
+
+CMD	["/usr/sbin/nginx", "-g", "daemon off;"]
