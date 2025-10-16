@@ -1,5 +1,0 @@
-services:
-  test-site:
-    build: .
-    ports:
-     - 8888:443
