@@ -1,8 +1,30 @@
+name: inception
+
 services:
   nginx:
+    container_name: nginx
     build:
       context: ../
       dockerfile: ./srcs/requirements/nginx/Dockerfile
     ports:
      - 8888:443
     restart: always
+    networks:
+      - frontend
+
+  wordpress:
+    build:
+      context: ../
+      dockerfile: ./srcs/requirements/wordpress/Dockerfile
+    restart: always
+    volumes:
+     - type: volume
+       source: wp-volume
+       target: /wordpress
+    networks:
+      - frontend
+networks:
+  frontend:
+    driver: bridge
+volumes:
+  wp-volume:
