@@ -1,0 +1,16 @@
+FROM alpine:3.19
+
+WORKDIR /var/www/html
+
+RUN \
+	apk add wget php-fpm && \
+	wget https://wordpress.org/latest.tar.gz && \
+	tar -xf latest.tar.gz && \
+	rm -rf latest.tar.gz && \
+	mv wordpress/* .
+
+
+COPY php.ini /etc/php82/php.ini
+#./srcs/requirements/wordpress/
+
+#ENTRYPOINT [ "tail", "-f", "dev/null" ]

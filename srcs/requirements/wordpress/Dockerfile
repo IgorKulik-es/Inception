@@ -10,4 +10,5 @@ RUN \
 COPY ./srcs/requirements/wordpress/php.ini /etc/php82/php.ini
 
 
-#ENTRYPOINT [ "/bin/sh", "tail" ]
+
+ENTRYPOINT [ "sleep", "infinity" ]
