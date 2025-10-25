@@ -3,19 +3,25 @@ FROM alpine:3.19
 RUN \
 	apk add mariadb mariadb-client && \
 	mkdir -p /var/lib/mysql && \
-	mkdir -p /run/mysqld && \
-	touch /run/mysqld/mysqld.pid /run/mysqld/mysqld.sock && \
-	chmod 777 /var/lib/mysql && \
-	chown mysql:mysql /var/lib/misc && \
 	chown mysql:mysql /var/lib/mysql && \
+	chmod -R 777 /var/lib/mysql && \
 	mariadb-install-db --user=mysql --datadir=/var/lib/mysql
-	#cd '/usr' ; /usr/bin/mariadbd-safe --datadir='/var/lib/mysql'
+RUN \
+	mkdir -p /run/mysqld/mysql && \
+	chown mysql:mysql /run/mysqld/mysql && \
+	chmod -R 777 /run/mysqld && \
+	touch /run/mysqld/mysqld.pid /run/mysqld/mysqld.sock && \
+	chown mysql:mysql /run/mysqld/mysqld.pid /run/mysqld/mysqld.sock && \
+	rm -rf /etc/my.cnf.d/mariadb-server.cnf
 
-WORKDIR /run/mysqld
+WORKDIR /www
 
 COPY mariadb_init.sh mariadb_init.sh
-COPY my.cnf /etc/my.cnf.d/custom_settings.conf
+COPY mariadb_start.sh mariadb_start.sh
+COPY my.cnf /etc/my.cnf
 
-RUN chmod 777 mariadb_init.sh
+RUN \
+	chmod 777 mariadb_init.sh mariadb_start.sh && \
+	chmod 644 /etc/my.cnf
 
-ENTRYPOINT [ "/run/mysqld/mariadb_init.sh", "mariadbd", "--user=root" ]
+ENTRYPOINT [ "./mariadb_init.sh", "./mariadb_start.sh" ]
