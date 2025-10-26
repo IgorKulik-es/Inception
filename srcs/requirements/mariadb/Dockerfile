@@ -17,11 +17,11 @@ RUN \
 WORKDIR /www
 
 COPY mariadb_init.sh mariadb_init.sh
-COPY mariadb_start.sh mariadb_start.sh
 COPY my.cnf /etc/my.cnf
 
 RUN \
-	chmod 777 mariadb_init.sh mariadb_start.sh && \
-	chmod 644 /etc/my.cnf
+	chmod 777 mariadb_init.sh && \
+	chmod 644 /etc/my.cnf && \
+	./mariadb_init.sh
 
-ENTRYPOINT [ "./mariadb_init.sh", "./mariadb_start.sh" ]
+ENTRYPOINT [ "mariadbd-safe" ]
