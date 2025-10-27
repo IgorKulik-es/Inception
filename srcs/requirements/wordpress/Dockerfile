@@ -8,7 +8,7 @@ RUN \
 	mv wp-cli.phar /usr/local/bin/wp
 
 COPY ./srcs/requirements/wordpress/php.ini /etc/php82/php.ini
-
-
+COPY --chmod=700 ./srcs/requirements/wordpress/wp_init.sh wp_init.sh
+COPY ./srcs/requirements/wordpress/www.conf /etc/php82/php-fpm.d/www.conf
 
 ENTRYPOINT [ "sleep", "infinity" ]

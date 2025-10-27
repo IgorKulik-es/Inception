@@ -24,4 +24,4 @@ RUN \
 	chmod 644 /etc/my.cnf && \
 	./mariadb_init.sh
 
-ENTRYPOINT [ "mariadbd-safe" ]
+ENTRYPOINT [ "mariadbd" ]

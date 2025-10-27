@@ -27,6 +27,8 @@ services:
     networks:
       - frontend
       - backend
+    ports:
+     - 9000:9000
   mariadb:
     container_name: mariadb
     build: ./requirements/mariadb
