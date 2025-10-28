@@ -17,7 +17,12 @@ services:
     build:
       context: ../
       dockerfile: ./srcs/requirements/wordpress/Dockerfile
+      secrets:
+       - db_secrets
     restart: always
+    depends_on:
+      mariadb:
+        condition: service_started
     env_file:
       - ../.env
     volumes:
@@ -29,9 +34,14 @@ services:
       - backend
     ports:
      - 9000:9000
+    secrets:
+     - wp_secrets
   mariadb:
     container_name: mariadb
-    build: ./requirements/mariadb
+    build:
+      context: ./requirements/mariadb
+      secrets:
+       - db_secrets
     restart: always
     env_file:
       - ../.env
@@ -43,9 +53,15 @@ services:
       - backend
     ports:
      - 3306:3306
+
 networks:
   frontend:
   backend:
 volumes:
   wp_volume:
   db_volume:
+secrets:
+  db_secrets:
+    file: ../.secrets/db_secrets
+  wp_secrets:
+    file: ../.secrets/wp_secrets

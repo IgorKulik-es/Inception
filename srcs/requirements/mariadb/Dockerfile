@@ -19,9 +19,8 @@ WORKDIR /www
 COPY mariadb_init.sh mariadb_init.sh
 COPY my.cnf /etc/my.cnf
 
-RUN \
-	chmod 777 mariadb_init.sh && \
-	chmod 644 /etc/my.cnf && \
-	./mariadb_init.sh
+RUN chmod 777 mariadb_init.sh && \
+	chmod 644 /etc/my.cnf
+RUN --mount=type=secret,id=db_secrets ./mariadb_init.sh
 
 ENTRYPOINT [ "mariadbd" ]
