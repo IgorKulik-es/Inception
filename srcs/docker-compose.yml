@@ -7,7 +7,7 @@ services:
       context: ../
       dockerfile: ./srcs/requirements/nginx/Dockerfile
     ports:
-     - 8888:443
+     - 443:443
     restart: always
     networks:
       - frontend
