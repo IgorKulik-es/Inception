@@ -26,9 +26,7 @@ services:
     env_file:
       - ../.env
     volumes:
-     - type: volume
-       source: wp_volume
-       target: /wordpress
+     - wp_volume:/var/www/html
     networks:
       - frontend
       - backend
@@ -46,9 +44,7 @@ services:
     env_file:
       - ../.env
     volumes:
-     - type: volume
-       source: db_volume
-       target: /var/lib/mysql
+     - db_volume:/var/lib/mysql
     networks:
       - backend
     ports:
@@ -58,8 +54,18 @@ networks:
   frontend:
   backend:
 volumes:
-  wp_volume:
   db_volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/ikulik/data/mariadb
+      o: bind
+  wp_volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/ikulik/data/wordpress
+      o: bind
 secrets:
   db_secrets:
     file: ../.secrets/db_secrets

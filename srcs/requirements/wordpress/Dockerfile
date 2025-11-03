@@ -16,5 +16,7 @@ RUN --mount=type=secret,id=db_secrets ./wp_install.sh
 
 RUN adduser -S www-data && \
 	addgroup www-data www-data
+RUN chown www-data:www-data /var/www/html
 
+#ENTRYPOINT [ "sleep", "infinity" ]
 ENTRYPOINT [ "./wp_init.sh", "php-fpm82", "-F" ]

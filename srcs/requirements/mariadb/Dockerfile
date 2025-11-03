@@ -2,7 +2,8 @@ FROM alpine:3.19
 
 RUN \
 	apk add mariadb mariadb-client && \
-	mkdir -p /var/lib/mysql && \
+	mkdir -p /var/lib/mysql
+RUN \
 	chown mysql:mysql /var/lib/mysql && \
 	chmod -R 777 /var/lib/mysql && \
 	mariadb-install-db --user=mysql --datadir=/var/lib/mysql
@@ -23,4 +24,5 @@ RUN chmod 777 mariadb_init.sh && \
 	chmod 644 /etc/my.cnf
 RUN --mount=type=secret,id=db_secrets ./mariadb_init.sh
 
-ENTRYPOINT [ "mariadbd" ]
+ENTRYPOINT [ "sleep", "infinity" ]
+#ENTRYPOINT [ "mariadbd" ]
