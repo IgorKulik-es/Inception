@@ -11,7 +11,8 @@ services:
     restart: always
     networks:
       - frontend
-
+    volumes:
+     - wp_volume:/var/www/html
   wordpress:
     container_name: wordpress
     build:
@@ -31,7 +32,7 @@ services:
       - frontend
       - backend
     ports:
-     - 9000:9000
+     - 9000
     secrets:
      - wp_secrets
   mariadb:
@@ -48,7 +49,7 @@ services:
     networks:
       - backend
     ports:
-     - 3306:3306
+     - 3306
 
 networks:
   frontend:

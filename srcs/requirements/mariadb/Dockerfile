@@ -24,5 +24,5 @@ RUN chmod 777 mariadb_init.sh && \
 	chmod 644 /etc/my.cnf
 RUN --mount=type=secret,id=db_secrets ./mariadb_init.sh
 
-ENTRYPOINT [ "sleep", "infinity" ]
-#ENTRYPOINT [ "mariadbd" ]
+#ENTRYPOINT [ "sleep", "infinity" ]
+ENTRYPOINT [ "mariadbd" ]
