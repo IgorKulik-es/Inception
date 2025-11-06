@@ -1,7 +1,5 @@
-THIS_FILE := $(lastword $(MAKEFILE_LIST))
+all: build
 
-help:
-		make -pRrq  -f $(THIS_FILE) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
 build:
 		docker-compose -f ./srcs/docker-compose.yml build $(c)
 up:
@@ -21,4 +19,4 @@ ps:
 		docker-compose -f ./srcs/docker-compose.yml ps
 relaunch: down build up
 
-.PHONY: help build up start down destroy stop restart ps relaunch
+.PHONY: all build up start down destroy stop restart ps relaunch

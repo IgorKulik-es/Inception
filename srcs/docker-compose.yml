@@ -3,29 +3,36 @@ name: inception
 services:
   nginx:
     container_name: nginx
+    image: nginx:1.0
     build:
-      context: ../
-      dockerfile: ./srcs/requirements/nginx/Dockerfile
+      context: ./requirements/nginx
+      secrets:
+       - ssh_secrets
     ports:
      - 443:443
     restart: always
+    env_file:
+      - .env
+    depends_on:
+      wordpress:
+        condition: service_started
     networks:
       - frontend
     volumes:
      - wp_volume:/var/www/html
   wordpress:
     container_name: wordpress
+    image: wordpress:1.0
     build:
-      context: ../
-      dockerfile: ./srcs/requirements/wordpress/Dockerfile
+      context: ./requirements/wordpress
       secrets:
        - db_secrets
     restart: always
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
     env_file:
-      - ../.env
+      - .env
     volumes:
      - wp_volume:/var/www/html
     networks:
@@ -37,13 +44,20 @@ services:
      - wp_secrets
   mariadb:
     container_name: mariadb
+    image: mariadb:1.0
     build:
       context: ./requirements/mariadb
       secrets:
        - db_secrets
     restart: always
+    healthcheck:
+      test: ["CMD", "nc", "-w", "1", "127.0.0.1", "3306"]
+      interval: 5s
+      timeout: 30s
+      retries: 5
+      start_period: 5s
     env_file:
-      - ../.env
+      - .env
     volumes:
      - db_volume:/var/lib/mysql
     networks:
@@ -72,3 +86,5 @@ secrets:
     file: ../.secrets/db_secrets
   wp_secrets:
     file: ../.secrets/wp_secrets
+  ssh_secrets:
+    file: ../.secrets/ssh_secrets
